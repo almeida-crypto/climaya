@@ -2,6 +2,7 @@
 
 **Herramienta:** Claude Code (app de escritorio de Claude, modelo Claude Opus 5.5)
 **Alumno:** Victor Almeida — GitHub: [almeida-crypto](https://github.com/almeida-crypto)
+**Repositorio:** https://github.com/almeida-crypto/climaya
 
 ---
 
@@ -13,33 +14,37 @@
 
 **¿Funcionó a la primera?** Casi. El código funcionó, pero al abrir `index.html` directamente (`file://`) en el navegador de pruebas la página se mostraba como una "foto" estática y el JavaScript no se ejecutaba, así que no se podía probar la búsqueda.
 
-**Qué se corrigió:** Se agregó `server.js`, un servidor mínimo con Node sin dependencias, para servir la app en `http://localhost:5173`. Con eso todas las pruebas pasaron. También se agregó una protección para que el servidor no entregue archivos fuera de la carpeta del proyecto (ruta tipo `/../../`).
+**Qué se corrigió:** Se agregó `server.js`, un servidor mínimo con Node sin dependencias, para servir la app en `http://localhost:5173`. Con eso todas las pruebas pasaron.
 
 ---
 
 ## Prompt 2
 
-> <!-- TODO: copia aquí tu prompt tal cual -->
+> Sí, súbelo
 
-**Qué respondió la IA:**
-**¿Funcionó a la primera?**
-**Qué tuve que corregir o ajustar:**
+**Qué respondió la IA:** Creó el repositorio público `almeida-crypto/climaya` con GitHub CLI (`gh repo create … --push`) y subió los 6 commits. Luego verificó en GitHub que todos los commits aparecieran con mi nombre y que no se hubiera subido ningún `.env` ni la carpeta de configuración `.claude/`.
+
+**¿Funcionó a la primera?** Sí.
+
+**Qué tuve que ajustar:** Nada. Antes de subirlo la IA me preguntó si lo quería público o privado, porque crear un repositorio público es algo que no se puede "deshacer" del todo (otros lo pueden ver o copiar).
 
 ---
 
 ## Prompt 3
 
-> <!-- TODO -->
+> hazme el punto 1 y 2, ya el video lo hago yo
 
-**Qué respondió la IA:**
-**¿Funcionó a la primera?**
-**Qué tuve que corregir o ajustar:**
+**Qué respondió la IA:** Antes de completar la bitácora revisó el código que ella misma había generado y encontró dos errores reales (ver la sección "Error de la IA que detecté"): un fallo de seguridad en `server.js` y un comando del README que no funciona en Windows. Corrigió los dos, los probó y los subió en commits separados. Luego completó esta bitácora y la sección del README sobre lo que hice sin IA.
+
+**¿Funcionó a la primera?** Sí, pero solo porque se pidió revisar; el código original de la IA tenía errores que no se veían usando la app normalmente.
+
+**Qué tuve que corregir o ajustar:** La IA no inventó los prompts que faltaban: solo anotó los que realmente envié. Los prompts 4 y 5 los hice después para entender el código.
 
 ---
 
 ## Prompt 4
 
-> <!-- TODO -->
+> <!-- PENDIENTE: prompt real, ej. "Explícame línea por línea qué hace fetchJSON en js/api.js" -->
 
 **Qué respondió la IA:**
 **¿Funcionó a la primera?**
@@ -49,7 +54,7 @@
 
 ## Prompt 5
 
-> <!-- TODO -->
+> <!-- PENDIENTE: prompt real -->
 
 **Qué respondió la IA:**
 **¿Funcionó a la primera?**
@@ -59,8 +64,28 @@
 
 ## Error de la IA que detecté
 
-<!-- TODO: describe un error real (código que no corría, función inexistente, solución insegura o ineficiente) y cómo lo resolviste. -->
+**1. Solución insegura en `server.js`.** Para evitar que alguien pidiera archivos fuera de la carpeta del proyecto (por ejemplo `/../../secreto.txt`), la IA escribió:
+
+```js
+if (!filePath.startsWith(ROOT)) { ... 403 ... }
+```
+
+El problema es que `startsWith` compara texto, no carpetas. Si el proyecto está en `C:\Users\mende\warner-2-2`, una carpeta vecina llamada `C:\Users\mende\warner-2-2-secreto` también "empieza con" ese texto y pasaba el filtro. Lo comprobé pidiendo `/../warner-2-2-secreto/x.txt`: el servidor respondió **404** (pasó la validación y solo no encontró el archivo) en lugar de **403** (prohibido).
+
+**Cómo se resolvió:** comparar contra la ruta más el separador de carpetas:
+
+```js
+if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) { ... 403 ... }
+```
+
+Después de la corrección, esa misma petición devuelve 403 y la app sigue cargando normal (200).
+
+**2. Comando que no corría en mi sistema.** El README decía `PORT=3000 node server.js` para cambiar el puerto. Esa sintaxis es de Linux/macOS; en PowerShell de Windows (lo que yo uso) da error. Se agregó la versión `$env:PORT=3000; node server.js` y se probó que funciona.
 
 ## Qué aprendí y qué haría distinto
 
-<!-- TODO: escríbelo con tus palabras. -->
+- La IA puede generar una app completa muy rápido, pero el código "que funciona" no es lo mismo que código correcto: los dos errores no aparecían usando la app normalmente, solo al pedir una revisión y probar casos raros.
+- Las validaciones de seguridad hay que probarlas con casos extremos (como la carpeta vecina con el mismo nombre), no solo con el caso obvio.
+- La IA asume a veces un sistema operativo distinto al mío. La próxima vez le diría desde el inicio que uso Windows y PowerShell.
+- La próxima vez pediría el proyecto por partes (primero la API, luego la interfaz) y le pediría que me explique cada parte antes de seguir, para entender mejor el código y poder explicarlo en la demostración.
+- Siempre pediría una revisión del código al final ("revisa si hay errores o problemas de seguridad") antes de entregar.
