@@ -38,7 +38,7 @@
 
 **¿Funcionó a la primera?** Sí, pero solo porque se pidió revisar; el código original de la IA tenía errores que no se veían usando la app normalmente.
 
-**Qué tuve que corregir o ajustar:** La IA no inventó los prompts que faltaban: solo anotó los que realmente envié. Los prompts 4 y 5 los hice después para entender el código.
+**Qué tuve que corregir o ajustar:** La IA no inventó los prompts que faltaban: solo anotó los que realmente envié. Los prompts 4 y 5 los hice después para entender y mejorar el código.
 
 ---
 
@@ -56,11 +56,13 @@
 
 ## Prompt 5
 
-> <!-- PENDIENTE: prompt real -->
+> Sí, corrígelo
 
-**Qué respondió la IA:**
-**¿Funcionó a la primera?**
-**Qué tuve que corregir o ajustar:**
+**Qué respondió la IA:** Envolvió `response.json()` en un `try/catch` dentro de `fetchJSON`, de modo que si la respuesta no es JSON válido se lanza un `ApiError` de tipo `"invalid"` con el mensaje "El servicio del clima respondió con datos inválidos". Explicó que hace falta escribir `return await response.json()` y no solo `return response.json()`: sin el `await`, la promesa se devuelve antes de fallar y el error se escapa del `try` sin pasar por el `catch`.
+
+**¿Funcionó a la primera?** Sí. Se probó en el navegador simulando una respuesta HTML: ahora sale un `ApiError` con el mensaje claro. También se comprobó que el error 429 sigue funcionando y que una búsqueda real ("Madrid") sigue dando el clima correcto.
+
+**Qué tuve que corregir o ajustar:** Nada más. Se actualizó el comentario de la clase `ApiError` para incluir el nuevo tipo `"invalid"`.
 
 ---
 
