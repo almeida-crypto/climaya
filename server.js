@@ -19,7 +19,8 @@ http.createServer((req, res) => {
   const filePath = path.join(ROOT, urlPath === "/" ? "index.html" : urlPath);
 
   // Evita que se pidan archivos fuera de la carpeta del proyecto (ej. /../../secreto).
-  if (!filePath.startsWith(ROOT)) {
+  // Se compara con ROOT + separador para que una carpeta vecina como "proyecto-secreto" no pase.
+  if (filePath !== ROOT && !filePath.startsWith(ROOT + path.sep)) {
     res.writeHead(403).end("Prohibido");
     return;
   }
