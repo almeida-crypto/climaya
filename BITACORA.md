@@ -44,11 +44,13 @@
 
 ## Prompt 4
 
-> <!-- PENDIENTE: prompt real, ej. "Explícame línea por línea qué hace fetchJSON en js/api.js" -->
+> Explícame fetchJSON
 
-**Qué respondió la IA:**
-**¿Funcionó a la primera?**
-**Qué tuve que corregir o ajustar:**
+**Qué respondió la IA:** Explicó la función `fetchJSON` de `js/api.js` por bloques: (1) revisa `navigator.onLine` para no intentar la petición sin red; (2) crea un `AbortController` y un `setTimeout` de 8 s que cancela la petición si tarda demasiado; (3) hace el `fetch` dentro de un `try/catch`, donde `AbortError` significa "tardó demasiado" y cualquier otro error significa que la petición ni siquiera llegó al servidor; (4) el `finally` limpia el temporizador pase lo que pase; (5) revisa el código de estado: 429 = límite de peticiones, 500 o más = servidor caído, cualquier otro no-OK = error genérico; (6) devuelve `response.json()`. Explicó también que `fetch` **no** lanza error con un 404 o 500, por eso hay que revisar `response.status` a mano.
+
+**¿Funcionó a la primera?** La explicación sí, pero al releer la función la IA notó que el comentario "convierte cualquier falla en un ApiError" no es del todo cierto: si la API respondiera con algo que no es JSON (por ejemplo una página HTML de mantenimiento), `response.json()` lanza un `SyntaxError`, no un `ApiError`. Lo comprobó simulando esa respuesta: el error que salió fue `SyntaxError: Unexpected token '<'`. La app no se rompe (muestra "Ocurrió un error inesperado"), pero el mensaje no es claro.
+
+**Qué tuve que corregir o ajustar:** Lo dejé anotado para corregirlo en el siguiente prompt.
 
 ---
 
