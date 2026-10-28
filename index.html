@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClimaYa</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app">
+    <header class="app__header">
+      <h1>ClimaYa</h1>
+      <p class="app__subtitle">Consulta el clima actual y el pronóstico de 5 días de cualquier ciudad.</p>
+    </header>
+
+    <form id="search-form" class="search" autocomplete="off">
+      <label for="city-input" class="sr-only">Ciudad</label>
+      <input id="city-input" name="city" type="text" placeholder="Ej. Guadalajara, Madrid, Tokio…" required minlength="2">
+      <button id="search-btn" type="submit">Buscar</button>
+    </form>
+
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+
+    <section id="result" class="result" hidden>
+      <div class="current">
+        <div class="current__icon" id="current-icon"></div>
+        <div>
+          <h2 id="place-name"></h2>
+          <p class="current__desc" id="current-desc"></p>
+        </div>
+        <p class="current__temp" id="current-temp"></p>
+      </div>
+      <ul class="details">
+        <li><span>Sensación</span><strong id="feels-like"></strong></li>
+        <li><span>Humedad</span><strong id="humidity"></strong></li>
+        <li><span>Viento</span><strong id="wind"></strong></li>
+      </ul>
+      <h3>Próximos días</h3>
+      <ul class="forecast" id="forecast"></ul>
+    </section>
+
+    <footer class="app__footer">
+      Datos: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>
+    </footer>
+  </main>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
