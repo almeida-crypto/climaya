@@ -37,7 +37,10 @@ cd climaya
 node server.js
 ```
 
-Abre http://localhost:5173 en el navegador. Para usar otro puerto: `PORT=3000 node server.js`.
+Abre http://localhost:5173 en el navegador. Para usar otro puerto:
+
+- Windows (PowerShell): `$env:PORT=3000; node server.js`
+- macOS / Linux / Git Bash: `PORT=3000 node server.js`
 
 > También puedes abrir `index.html` directamente en el navegador; el servidor solo es una forma cómoda de servir los archivos.
 
