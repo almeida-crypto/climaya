@@ -9,7 +9,7 @@ const TIMEOUT_MS = 8000;
 class ApiError extends Error {
   constructor(userMessage, kind) {
     super(userMessage);
-    this.kind = kind; // "offline" | "timeout" | "rate-limit" | "server" | "empty" | "unknown"
+    this.kind = kind; // "offline" | "timeout" | "rate-limit" | "server" | "empty" | "invalid" | "unknown"
   }
 }
 
@@ -45,7 +45,13 @@ async function fetchJSON(url) {
     throw new ApiError(`La petición falló (código ${response.status}).`, "unknown");
   }
 
-  return response.json();
+  // Si el servidor responde algo que no es JSON (ej. una página HTML de mantenimiento),
+  // response.json() lanza SyntaxError; lo convertimos en un mensaje claro.
+  try {
+    return await response.json();
+  } catch {
+    throw new ApiError("El servicio del clima respondió con datos inválidos. Inténtalo más tarde.", "invalid");
+  }
 }
 
 // Busca una ciudad por nombre y devuelve la primera coincidencia.
