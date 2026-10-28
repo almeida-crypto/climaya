@@ -67,4 +67,5 @@ evidencia/        Captura de GitHub Pro y enunciado de la tarea
 - Crear y configurar mi cuenta de GitHub, solicitar y activar el GitHub Student Developer Pack (GitHub Pro) y tomar la captura de evidencia.
 - Instalar y configurar Git en mi computadora (nombre, correo y sesión de GitHub).
 - Revisar y entender cada archivo del código para poder explicarlo, y probar la app por mi cuenta.
-- <!-- TODO: agrega aquí cualquier otra cosa que hayas hecho tú (cambios de diseño, pruebas, el video de demostración, etc.) -->
+- Decidir qué pedirle a la IA, aprobar la publicación del repositorio y revisar los cambios antes de entregarlos.
+- Grabar el video de demostración explicando cómo funciona la app y una parte del código.
